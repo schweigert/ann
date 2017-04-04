@@ -13,7 +13,11 @@ P = [0 0 0 1; 0 0 1 0; 0 1 0 0; 1 0 0 0];
 U = P*U
 
 // Para trocar linhas, usamos
-P = [0 0 1 0; 0 1 0 0; 0 0 0 1; 1 0 0 0];
+// P = [0 0 1 0; 0 1 0 0; 0 0 0 1; 1 0 0 0];
 // Assim, fatoramos corretamente as linhas de L
 
 L = P*L
+
+
+disp(U)
+disp(L)
