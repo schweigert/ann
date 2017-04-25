@@ -1,8 +1,7 @@
-function fat(n)
+function y=fat(n)
     if n == 0 then
-        return 1
+        y = 1
+    else
+        y=n*fat(n-1)
     end
-    return n*fat(n-1)
 endfunction
-
-a = fat(6)
