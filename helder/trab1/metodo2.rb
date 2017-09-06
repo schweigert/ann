@@ -10,7 +10,7 @@ end
 
 class Config
 
-  @xInicial =  0.0
+  @xInicial =  1.0
   @xFinal   = 10.0
   @xPassos  =  0.5
 
@@ -20,40 +20,6 @@ class Config
     attr_reader :xPassos
   end
 
-end
-
-intervalo = (Config.xInicial .. Config.xFinal).step(Config.xPassos).to_a
-
-raizes = []
-analise = []
-
-for i in 1...intervalo.size
-  fa = f(intervalo[i-1])
-  fb = f(intervalo[i])
-  puts "Intervalo: (#{intervalo[i-1]},#{intervalo[i]})"
-  puts "fa: #{fa}"
-  puts "fb: #{fb}"
-  teorema = ((fa > 0 and fb < 0) or (fb > 0 and fa < 0))
-  puts teorema
-
-  if fa == 0
-    raizes << intervalo[i-1]
-    puts "Raiz Exata: #{intervalo[i-1]}"
-  end
-
-  if fb == 0
-    raizes << intervalo[i]
-    puts "Raiz Exata: #{intervalo[i]}"
-  end
-
-  analise << [intervalo[i-1], intervalo[i]] if teorema
-  puts "----"*5
-end
-
-puts "Raizes encontradas nos intervalos:"
-
-for i in analise
-  puts "[#{i[0]},#{i[1]}]"
 end
 
 def posicaoFalsa a, b, k = 300
@@ -95,18 +61,62 @@ def posicaoFalsa a, b, k = 300
 
 end
 
+intervalo = (Config.xInicial .. Config.xFinal).step(Config.xPassos).to_a
 
-for i in analise
-  puts "Análise da raiz #{i.to_s}"
-  m = posicaoFalsa(i[0],i[1])
-  puts "Resultado: #{m}"
-  puts "---"*5
-  raizes << m
+raizes = []
+analise = []
+
+for i in 1...intervalo.size
+  fa = f(intervalo[i-1])
+  fb = f(intervalo[i])
+  puts "Intervalo: (#{intervalo[i-1]},#{intervalo[i]})"
+  puts "fa: #{fa}"
+  puts "fb: #{fb}"
+  teorema = ((fa > 0 and fb < 0) or (fb > 0 and fa < 0))
+  puts teorema
+
+  if fa == 0
+    raizes << intervalo[i-1]
+    puts "Raiz Exata: #{intervalo[i-1]}"
+  end
+
+  if fb == 0
+    raizes << intervalo[i]
+    puts "Raiz Exata: #{intervalo[i]}"
+  end
+
+  analise << [intervalo[i-1], intervalo[i]] if teorema
+  puts "----"*5
 end
 
-puts "\n\n"
-puts "Raizes:"
+if analise.size > 0
 
-for i in raizes
-  puts "#{i}\t\t#{f i}"
+  puts "Raizes encontradas nos intervalos:"
+
+  for i in analise
+    puts "[#{i[0]},#{i[1]}]"
+  end
+
+
+  for i in analise
+    puts "Análise da raiz #{i.to_s}"
+    m = posicaoFalsa(i[0],i[1])
+    puts "Resultado: #{m}"
+    puts "---"*5
+    raizes << m
+  end
+
+  puts "\n\n"
+  puts "Raizes:"
+
+  for i in raizes.uniq
+    puts "#{i}\t\t#{f i}"
+  end
+
+else
+  puts "Não foi encontrado nenhuma possível raiz pelos passos indicados."
+  puts "Aplicando o algoritmo no domínio completo indicado"
+  m = posicaoFalsa(Config.xInicial, Config.xFinal)
+  puts "Raizes:"
+  puts "#{m}\t\t#{f m}"
 end
