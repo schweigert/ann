@@ -22,32 +22,42 @@ class Config
 
 end
 
-def secante x0, x1, k = 300
+def posicaoFalsa a, b, k = 300
 
-  fx1 = f x1
-  fx0 = f x0
+  fa = f a
+  fb = f b
 
-  x2 = x1 - fx1*(x0 - x1)/(fx0 - fx1)
+  m = (a*fb - b*fa)/(fb - fa)
 
-  fx2 = f x2
+  fm = f m
 
-  e = fx2.abs
+  e = fm.abs
 
-  puts "Secante: k #{k}"
-  puts "\tx0:  #{x0}"
-  puts "\tx1:  #{x1}"
-  puts "\tx2:  #{x2}"
-  puts "\tf(x0): #{fx0}"
-  puts "\tf(x1): #{fx1}"
-  puts "\tf(x2): #{fx2}"
-  puts "\te:     #{e}"
+  puts "Posicao Falsa: #{k}"
+  puts "\ta:  #{a}"
+  puts "\tfa: #{fa}"
+  puts "\tb:  #{b}"
+  puts "\tfb: #{fb}"
+  puts "\tm:  #{m}"
+  puts "\tfm: #{fm}"
+  puts "\te:  #{e}"
 
+  # Condições de parada
+  return m if e < 0.0000001
+  return m if k <= 0
+  return m if a == m or b == m
 
-  return x2 if e < 0.0000001
-  return x2 if k <= 0
+  if fa > 0 and fb < 0
+    return posicaoFalsa m, b, k-1 if fm > 0
+    return posicaoFalsa a, m, k-1 if fm < 0
+  elsif fa < 0 and fb > 0
+    return posicaoFalsa a, m, k-1 if fm > 0
+    return posicaoFalsa m, b, k-1 if fm < 0
+  end
 
-  return secante(x1, x2, k-1)
+  # Se der algum erro
 
+  return m
 
 end
 
@@ -79,7 +89,6 @@ for i in 1...intervalo.size
   puts "----"*5
 end
 
-
 if analise.size > 0
 
   puts "Raizes encontradas nos intervalos:"
@@ -88,9 +97,10 @@ if analise.size > 0
     puts "[#{i[0]},#{i[1]}]"
   end
 
+
   for i in analise
     puts "Análise da raiz #{i.to_s}"
-    m = secante(i[0],i[1])
+    m = posicaoFalsa(i[0],i[1])
     puts "Resultado: #{m}"
     puts "---"*5
     raizes << m
@@ -106,7 +116,7 @@ if analise.size > 0
 else
   puts "Não foi encontrado nenhuma possível raiz pelos passos indicados."
   puts "Aplicando o algoritmo no domínio completo indicado"
-  m = secante(Config.xInicial, Config.xFinal)
+  m = posicaoFalsa(Config.xInicial, Config.xFinal)
   puts "Raizes:"
   puts "#{m}\t\t#{f m}"
 end
