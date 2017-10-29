@@ -47,6 +47,4 @@ function y=Solve(x)
     y=x
 endfunction
 
-x=[0;0]
-xs = Solve(x)
-disp(xs)
+disp(Solve([0;0]))
